@@ -1,5 +1,7 @@
 #include "ShaderGL.h"
 
+
+#include <signal.h>
 #include <iostream>
 
 ShaderGL::ShaderGL(const char* vertexPath, const char* fragmentPath)
@@ -28,6 +30,10 @@ void ShaderGL::Unbind() const
     glUseProgram(0);
 }
 
+void ShaderGL::SetUniformBlockBinding(const GLchar* uniformBlockName, const GLuint &binding){
+    GLuint index = glGetUniformBlockIndex(m_ID, uniformBlockName);
+    glUniformBlockBinding(m_ID, index, binding);
+}
 
 unsigned int ShaderGL::GetID() const
 {
@@ -120,6 +126,7 @@ void ShaderGL::Init(const char* vertexPath, const char* fragmentPath)
     }
     catch (std::ifstream::failure e) {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+        return;
     }
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
@@ -127,6 +134,8 @@ void ShaderGL::Init(const char* vertexPath, const char* fragmentPath)
     // 2. compile shaders
     unsigned int vertex, fragment;
     // vertex shader
+
+    //raise(SIGSEGV);
     vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
@@ -143,7 +152,7 @@ void ShaderGL::Init(const char* vertexPath, const char* fragmentPath)
     glLinkProgram(m_ID);
     CheckCompileErrors(m_ID, "PROGRAM");
 
-    // 3. delete the shaders as they're linked into our program now and no longer necessery
+    // 3. delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }

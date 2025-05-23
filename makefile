@@ -1,5 +1,6 @@
 NAME		:=	playground.exe
 LIBS		:=				\
+		glew				\
 		glfw3				\
 		glu32				\
 		gdi32				\
@@ -18,7 +19,7 @@ LIBS		:= $(addprefix -l, $(LIBS))
 $(info $(LIBS))
 			
 BUILD_DIR	:= .build
-
+LIB_DIR		:= lib/
 SRC_DIR		:= src
 SRCS		:=			\
 	main.cpp			\
@@ -27,7 +28,7 @@ SRCS		:=			\
 #glew.c
 
 OBJS		:= $(SRCS:%.cpp=$(BUILD_DIR)\\%.o)
-OBJS += $(BUILD_DIR)\glew.o
+#OBJS += $(BUILD_DIR)\glew.o
 OBJS += $(BUILD_DIR)\ShaderGL.o
 
 $(info $(OBJS))
@@ -51,20 +52,20 @@ CFLAGS		:=
 CPPFLAGS	:= -MMD -MP $(INCLUDES)
 CPPFLAGS += -DGLEW_STATIC
 #-DGLEW_STATIC
-LDFLAGS		:= -Llib64/
+LDFLAGS		:= -L$(LIB_DIR)
 
 #program: $(OBJECTS)
 #	g++ -o build\program $(OBJECTS) -I $(INCLUDES) lib64/\
 #	$(LIBS)
 
-all: $(NAME)
+all: $(NAME) projects
 
 test:
 $(info $(OBJS))
 $(info $(SRCS))
 
 
-$(NAME):$(OBJS)
+$(NAME): glew $(OBJS)
 #	$(CXX) $(CFLAGS) $(CPPFLAGS) $(OBJS) -o $(NAME)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $(OBJS) $(LDFLAGS) $(LIBS) -o $(NAME)
 	$(info $(@) is ready)
@@ -75,11 +76,19 @@ $(BUILD_DIR)\\%.o: $(SRC_DIR)\\%.cpp
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 	$(info $(*))
 
-$(BUILD_DIR)\glew.o: $(SRC_DIR)\glew.c
+
+$(BUILD_DIR)\ShaderGL.o: common\gl_boilerplate\src\ShaderGL.cpp
 	if not exist $(@D) mkdir $(@D)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)\ShaderGL.o: common\gl_boilerplate\src\ShaderGL.cpp
+projects		:
+	for /r %i in (*) do echo %i
+
+
+glew			:		$(BUILD_DIR)\glew.o
+	$(AR) $(ARFLAGS)  -o $(LIB_DIR)lib$@.a $(BUILD_DIR)\glew.o
+
+$(BUILD_DIR)\glew.o: $(SRC_DIR)\glew.c
 	if not exist $(@D) mkdir $(@D)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 

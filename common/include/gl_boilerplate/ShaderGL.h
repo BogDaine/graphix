@@ -46,6 +46,8 @@ public:
 
     // void SetLight(const Light& val, const std::string& name = "light");
 
+    void SetUniformBlockBinding(const GLchar* asd, const GLuint &Binding);
+
 private:
     void Init(const char* vertexPath, const char* fragmentPath);
 
