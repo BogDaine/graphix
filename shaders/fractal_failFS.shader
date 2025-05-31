@@ -20,8 +20,8 @@ layout(shared) uniform app_info{
     float uDeltaTime;
 };
 
-// float WIN_WIDTH = 800.f;
-// float WIN_HEIGHT = 600.f;
+uniform sampler2D texture0;
+
 vec2 uv;
 vec2 mPos;
 void main()
@@ -42,7 +42,7 @@ void main()
     vec2 n = vec2(sin(angle), cos(angle));
     
     //uv.x +=.5;
-    int iterations = 5;
+    int iterations = 1;
     float scale = 1.;
     for(int i = 0; i < iterations; i++){
         scale *= 3.;
@@ -69,6 +69,7 @@ void main()
      FragColor = vec4(newC * sin(d*.3), 1.f);
     //  FragColor = vec4(vec3((d)), 1.f);
      FragColor.rg += uv;
+     FragColor = texture(texture0, uv);
      //FragColor.rg *= sin(uv)*sin(d);
     //  FragColor.b *= sin(uv.x*(uTime));
    

@@ -1,4 +1,4 @@
-NAME		:=	playground.exe
+NAME		:=	main.exe
 LIBS		:=				\
 		glew				\
 		glfw3				\
@@ -12,11 +12,15 @@ INCLUDES	:=								\
 		include/glfw						\
 		common/include/gl_boilerplate		\
 		
+PROJECTS	:=								\
+		shaderplayground					\
 
 INCLUDES	:= $(addprefix -I, $(INCLUDES))
 LIBS		:= $(addprefix -l, $(LIBS))
+PROJECTS	:= $(addprefix projects\, $(PROJECTS))
 
-$(info $(LIBS))
+#$(info $(PROJECTS))
+#$(info $(LIBS))
 			
 BUILD_DIR	:= .build
 LIB_DIR		:= lib/
@@ -81,8 +85,10 @@ $(BUILD_DIR)\ShaderGL.o: common\gl_boilerplate\src\ShaderGL.cpp
 	if not exist $(@D) mkdir $(@D)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
-projects		:
-	for /r %i in (*) do echo %i
+projects		:	$(PROJECTS)
+#	for dir in $(PROJECTS) do echo yes echo yes
+$(PROJECTS)		:
+	$(MAKE)	-C $@
 
 
 glew			:		$(BUILD_DIR)\glew.o
@@ -103,3 +109,5 @@ fclean: clean
 re:
 	$(MAKE) fclean
 	$(MAKE) all
+
+.PHONY	: projects $(PROJECTS)

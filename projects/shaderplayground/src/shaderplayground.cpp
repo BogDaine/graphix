@@ -2,6 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <glfw3.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+
 
 ShaderGL *current_shader = nullptr;
 UniformBlockGL *UB = nullptr;
@@ -77,13 +80,41 @@ void init(){
     initOpenGL();
     info::init();
     setupBuffers();
+
+    stbi_set_flip_vertically_on_load(true);
 }
 
+
+void loadImage(unsigned int textureUnit, const char *path){
+    
+	//fileName = path.substr(path.find_last_of('/') + 1);
+	unsigned char *data = NULL;
+    int width, height, channels;
+	data = stbi_load(path, &width, &height, &channels, 0);
+    
+    if(!data){
+        return;
+    }
+
+    GLenum format;
+		if (channels == 1)
+			format = GL_RED;
+		else if (channels == 3)
+			format = GL_RGB;
+		else if (channels == 4)
+			format = GL_RGBA;
+
+    setTextureData(textureUnit, width, height, data, format);
+    free(data);
+}
 
 
 int main(){
     
     init();
+
+    // loadImage(0, "textures\\rainbow_cat.jpg");
+    loadImage(0, "textures\\Masha.jpg");
     mainLoop();
     return 0;
 }
