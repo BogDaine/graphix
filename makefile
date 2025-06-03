@@ -28,11 +28,20 @@ SRC_DIR		:= src
 SRCS		:=			\
 	main.cpp			\
 	window.cpp			\
-#	shader.cpp
-#glew.c
+
+IMGUI_DIR	:= thirdparty\\imgui
+IMGUI_SRCS	:=	$(wildcard $(IMGUI_DIR)/*.cpp)
+IMGUI_SRCS	+=	$(IMGUI_DIR)\\backends\\imgui_impl_glfw.cpp
+IMGUI_SRCS	+=	$(IMGUI_DIR)\\backends\\imgui_impl_opengl3.cpp
+#IMGUI_SRCS	+=	$(IMGUI_DIR)\\backends\\imgui_impl_win32.cpp
+
+IMGUI_OBJ	:=	$(IMGUI_SRCS:%.cpp=$(BUILD_DIR)\\%.o)
+
+$(info $(IMGUI_SRCS))
+$(info $(IMGUI_OBJ))
 
 OBJS		:= $(SRCS:%.cpp=$(BUILD_DIR)\\%.o)
-#OBJS += $(BUILD_DIR)\glew.o
+
 OBJS += $(BUILD_DIR)\ShaderGL.o
 
 $(info $(OBJS))
@@ -69,7 +78,7 @@ $(info $(OBJS))
 $(info $(SRCS))
 
 
-$(NAME): glew $(OBJS)
+$(NAME): glew imgui_glfw $(OBJS)
 #	$(CXX) $(CFLAGS) $(CPPFLAGS) $(OBJS) -o $(NAME)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) $(OBJS) $(LDFLAGS) $(LIBS) -o $(NAME)
 	$(info $(@) is ready)
@@ -94,7 +103,15 @@ $(PROJECTS)		:
 glew			:		$(BUILD_DIR)\glew.o
 	$(AR) $(ARFLAGS)  -o $(LIB_DIR)lib$@.a $(BUILD_DIR)\glew.o
 
+
 $(BUILD_DIR)\glew.o: $(SRC_DIR)\glew.c
+	if not exist $(@D) mkdir $(@D)
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+imgui_glfw	:		$(IMGUI_OBJ)
+	$(AR) $(ARFLAGS)  -o $(LIB_DIR)lib$@.a $<
+
+$(IMGUI_OBJ)	:		$(IMGUI_SRCS)
 	if not exist $(@D) mkdir $(@D)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
@@ -104,6 +121,9 @@ clean:
 	$(RM) $(OBJS) $(DEPS)
 	$(info $(DEPS))
 	$(info cleaning...)
+
+clean_projects:
+
 fclean: clean
 	$(RM) $(NAME)
 re:

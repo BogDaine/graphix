@@ -1,6 +1,11 @@
 #include "shaderplayground.h"
+#include "openglstuff.h"
+#include "appinfo.h"
+#include "input.h"
+
 #include <iostream>
 #include <vector>
+#include <imgui.h>
 #include <glfw3.h>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
@@ -78,6 +83,8 @@ void drawScene(){
 void init(){
     createWindow();
     initOpenGL();
+
+    
     info::init();
     setupBuffers();
 

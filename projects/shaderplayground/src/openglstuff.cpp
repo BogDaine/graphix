@@ -2,6 +2,7 @@
 #include "openglstuff.h"
 
 #include <vector>
+#include <iostream>
 
 ShaderGL        *ogl::appShader;
 UniformBlockGL  *ogl::appInfoUB;

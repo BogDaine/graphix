@@ -1,16 +1,13 @@
 #ifndef SHADERPLAYGROUND_H
 #define SHADERPLAYGROUND_H
 
-#include "openglstuff.h"
 #include "appinfo.h"
-#include "input.h"
-
-#include <iostream>
 
 void init();
 
 void createWindow();
 void mainLoop();
+void loadImage(unsigned int textureUnit, const char *path);
 
 void updateUniforms();
 void drawScene();
