@@ -5,9 +5,6 @@
 
 // #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 
 #include <glfw3.h>
 
@@ -45,22 +42,13 @@ void createWindow(){
         glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
         glfwSetCursorPosCallback(window, mouseCallback);
         
+        info::setWindow(window);
+
         //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         //TODO: TICK RATE!
         glfwSwapInterval(1);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init();
-
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; 
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     //exit(2);
 }
@@ -75,24 +63,8 @@ void mainLoop(){
 
         drawScene();
 
-
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::ShowDemoWindow();
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        //updateUniforms();
-
-        //if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            // Update and Render additional Platform Windows
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-
-            // TODO for OpenGL: restore current GL context.
-        }
+        showUI();
+       
         glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
 

@@ -6,6 +6,8 @@
 #define DEFAULT_WINDOW_WIDTH    800
 #define DEFAULT_WINDOW_HEIGHT   600
 
+typedef struct GLFWwindow GLFWwindow;
+
 namespace info{
     extern int windowWidth;
     extern int windowHeight; 
@@ -17,6 +19,9 @@ namespace info{
 
     double getTime();
     double getDeltaTime();
+
+    GLFWwindow *getWindow();
+    void setWindow(GLFWwindow *w);
 }
 
 

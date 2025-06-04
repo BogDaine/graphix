@@ -2,9 +2,8 @@
 #define MYUTILS_H
 
 #include <string>
-#include "exception"
 
-//typedef std::exception;
+typedef struct std::exception;
 
 namespace MyUtils{
     

@@ -44,6 +44,7 @@ SRCS		:=				\
 	input.cpp				\
 	openglstuff.cpp			\
 	appinfo.cpp				\
+	UI.cpp					\
 							\
 	render.cpp				\
 	UniformBlockGL.cpp		\

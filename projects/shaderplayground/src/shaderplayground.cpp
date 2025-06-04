@@ -85,6 +85,7 @@ void drawScene(){
 void init(){
     createWindow();
     initOpenGL();
+    initUI();
 
     
     info::init();

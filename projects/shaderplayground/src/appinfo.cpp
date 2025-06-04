@@ -36,3 +36,8 @@ void info::updateResolution(const int &width, const int &height){
 
 double info::getTime()          {return lastTime;}
 double info::getDeltaTime()     {return deltaTime;}
+
+static GLFWwindow *window = nullptr;
+
+GLFWwindow *info::getWindow()         {return window;}
+void info::setWindow(GLFWwindow *w)   {window = w;}
