@@ -3,6 +3,8 @@
 #include "appinfo.h"
 #include "input.h"
 
+#include "myutils.h"
+
 #include <iostream>
 #include <vector>
 #include <imgui.h>
@@ -86,6 +88,8 @@ void init(){
 
     
     info::init();
+    MyUtils::setDeltaTimeFunctionS(info::getDeltaTime);
+
     setupBuffers();
 
     stbi_set_flip_vertically_on_load(true);

@@ -7,9 +7,6 @@
 #define DEFAULT_WINDOW_HEIGHT   600
 
 namespace info{
-    extern double appTime;
-    extern double deltaTime;
-
     extern int windowWidth;
     extern int windowHeight; 
 
@@ -17,6 +14,9 @@ namespace info{
 
     void updateTime(const double &time);
     void updateResolution(const int &width, const int &height);
+
+    double getTime();
+    double getDeltaTime();
 }
 
 

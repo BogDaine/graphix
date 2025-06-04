@@ -4,8 +4,8 @@
 
 UniformBlockGL::UniformBlockGL( const std::string &name, const GLuint &binding,
                                 const GLuint &uniformCnt, const char** uniformNames):
-m_Name(name),
-m_BindIndex(binding)
+    m_Name(name),
+    m_BindIndex(binding)
 {
     for(size_t i = 0; i < uniformCnt; i++){
         m_UniformOffsets.insert(std::make_pair<std::string, GLint>(uniformNames[i], 0));

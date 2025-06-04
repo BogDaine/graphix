@@ -1,7 +1,9 @@
 #include "shaderplayground.h"
 #include "input.h"
 
-#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+#include "myutils.h"
+
+// #define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -10,6 +12,7 @@
 #include <glfw3.h>
 
 #include <iostream>
+
 
 static GLFWwindow* window;
 
@@ -43,6 +46,8 @@ void createWindow(){
         glfwSetCursorPosCallback(window, mouseCallback);
         
         //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+        //TODO: TICK RATE!
         glfwSwapInterval(1);
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
@@ -65,6 +70,8 @@ void mainLoop(){
 
         glfwPollEvents();
         info::updateTime(glfwGetTime());
+
+        MyUtils::executeAllDelayedFunctions();
 
         drawScene();
 

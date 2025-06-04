@@ -14,9 +14,11 @@ INCLUDES	:=									\
 		../../include/glfw						\
 		../../thirdparty/imgui					\
 		../../thirdparty/imgui/backends			\
+		../../common							\
 		../../common/include/gl_boilerplate		\
 		
 GLBP_SRC_DIR	:= ../../common/gl_boilerplate\src
+COMMON_DIR		:= ../../common
 
 INCLUDES	:= $(addprefix -I, $(INCLUDES))
 LIBS		:= $(addprefix -l, $(LIBS))
@@ -46,20 +48,17 @@ SRCS		:=				\
 	render.cpp				\
 	UniformBlockGL.cpp		\
 	ShaderGL.cpp			\
+							\
+	myutils.cpp				\
 
 SRCS	+= $(IMGUI_SRCS:%.cpp=%.o)
 
 
-#	shader.cpp
-#glew.c
-
 OBJS		:= $(SRCS:%.cpp=$(BUILD_DIR)\\%.o)
-#OBJS += $(BUILD_DIR)\ShaderGL.o
 
 $(info $(OBJS))
 
 SRCS		:= $(SRCS:%=$(SRC_DIR)\\%)
-#SRCS += 	..\..\common\gl_boilerplate\src\ShaderGL.cpp
 
 DEPS		:= $(OBJS:%.o=%.d)
 
@@ -90,6 +89,11 @@ $(BUILD_DIR)\\%.o: $(SRC_DIR)\\%.cpp
 $(BUILD_DIR)\\%.o: $(GLBP_SRC_DIR)\\%.cpp
 	if not exist $(@D) mkdir $(@D)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)\\%.o: $(COMMON_DIR)\\%.cpp
+	if not exist $(@D) mkdir $(@D)
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
 
 
 
