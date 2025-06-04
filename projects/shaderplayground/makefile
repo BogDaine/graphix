@@ -17,7 +17,7 @@ INCLUDES	:=									\
 		../../common							\
 		../../common/include/gl_boilerplate		\
 		
-GLBP_SRC_DIR	:= ../../common/gl_boilerplate\src
+GLBP_SRC_DIR	:= ../../common/gl_boilerplate/src
 COMMON_DIR		:= ../../common
 
 INCLUDES	:= $(addprefix -I, $(INCLUDES))
@@ -27,12 +27,12 @@ LIB_DIR		:= ../../lib/
 
 IMGUI_DIR	:= ../../thirdparty/imgui
 IMGUI_SRCS	:=	$(wildcard $(IMGUI_DIR)/*.cpp)
-IMGUI_SRCS	+=	$(IMGUI_DIR)\\backends\\imgui_impl_glfw.cpp
-IMGUI_SRCS	+=	$(IMGUI_DIR)\\backends\\imgui_impl_opengl3.cpp
-#IMGUI_SRCS	+=	$(IMGUI_DIR)\\backends\\imgui_impl_win32.cpp
 
-IMGUI_OBJ	:=	$(IMGUI_SRCS:%.cpp=$(BUILD_DIR)\\%.o)
+IMGUI_SRCS	+=	$(IMGUI_DIR)/backends/imgui_impl_glfw.cpp
+IMGUI_SRCS	+=	$(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
 
+IMGUI_OBJ	:=	$(IMGUI_SRCS:$(IMGUI_DIR)/backends/%.cpp=$(BUILD_DIR)%.o)
+IMGUI_OBJ	:=	$(IMGUI_OBJ:$(IMGUI_DIR)/%.cpp=$(BUILD_DIR)%.o)
 
 
 BUILD_DIR	:= .build
@@ -51,13 +51,18 @@ SRCS		:=				\
 							\
 	myutils.cpp				\
 
-SRCS	+= $(IMGUI_SRCS:%.cpp=%.o)
+$(info	$(IMGUI_SRCS))
+IMGUI_OBJ	:=	$(IMGUI_OBJ:%.o=$(BUILD_DIR)/%.o)
+
+#SRCS	+= $(IMGUI_SRCS:%.cpp=%.o)
 
 
 OBJS		:= $(SRCS:%.cpp=$(BUILD_DIR)\\%.o)
+OBJS		+= $(IMGUI_OBJ)
 
+$(info :::OBJECTS::: )
 $(info $(OBJS))
-
+$(info --------------- )
 SRCS		:= $(SRCS:%=$(SRC_DIR)\\%)
 
 DEPS		:= $(OBJS:%.o=%.d)
@@ -93,6 +98,17 @@ $(BUILD_DIR)\\%.o: $(GLBP_SRC_DIR)\\%.cpp
 $(BUILD_DIR)\\%.o: $(COMMON_DIR)\\%.cpp
 	if not exist $(@D) mkdir $(@D)
 	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: $(IMGUI_DIR)/%.cpp
+	if not exist $(@D) mkdir $(@D)
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/%.o: $(IMGUI_DIR)/backends/%.cpp
+#if not exist $(@D) mkdir $(@D)
+	$(CXX) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+
+
 
 
 
