@@ -84,9 +84,8 @@ void drawScene(){
 
 void init(){
     createWindow();
-    initOpenGL();
+    ogl::init();
     initUI();
-
     
     info::init();
     MyUtils::setDeltaTimeFunctionS(info::getDeltaTime);
@@ -116,8 +115,13 @@ void loadImage(unsigned int textureUnit, const char *path){
 		else if (channels == 4)
 			format = GL_RGBA;
 
-    setTextureData(textureUnit, width, height, data, format);
+    ogl::setTextureData(textureUnit, width, height, data, format);
     free(data);
+}
+
+void loadShader(const char *vertexPath, const char *fragmentPath){
+    auto newShader = new ShaderGL(vertexPath, fragmentPath);
+    ogl::setAppShader(newShader);
 }
 
 

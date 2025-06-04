@@ -35,9 +35,11 @@ void ShaderGL::SetUniformBlockBinding(const GLchar* uniformBlockName, const GLui
     glUniformBlockBinding(m_ID, index, binding);
 }
 
-unsigned int ShaderGL::GetID() const
-{
+unsigned int ShaderGL::GetID() const{
     return m_ID;
+}
+bool ShaderGL::IsLinked()         const{
+    return m_linked;
 }
 
 // void ShaderGL::SetVec3(const std::string& name, const glm::vec3& value)
@@ -174,6 +176,9 @@ void ShaderGL::CheckCompileErrors(unsigned int shader, std::string type)
             glGetProgramInfoLog(shader, 1024, NULL, infoLog);
             std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
+        else
+            m_linked = true;
+
     }
 }
 

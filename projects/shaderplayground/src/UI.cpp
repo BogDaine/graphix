@@ -1,8 +1,11 @@
 #include "shaderplayground.h"
+#include "openglstuff.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+
+#include <string>
 
 void initUI(){
     
@@ -19,9 +22,35 @@ void initUI(){
 
 }
 
+char *text = new char[512];
+char *fragmentShaderPath = new char[512];
 void UIElements(){
-     ImGui::Begin("Hello, world!");
-     ImGui::End();
+    ImGui::Begin("Hello, world!");
+
+
+    //for(int i = 0; i < MAX_TEXTURE_UNITS; i++){
+    int i = 0;
+        ImGui::InputText("text", text, 512 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
+        ImGui::SameLine();
+        if(ImGui::Button((std::string("texture_")+std::to_string(i)).c_str(), ImVec2(72, 24))){
+            loadImage(i, text);
+        }
+    //}
+    //delete text;
+    
+    ImGui::End();
+
+
+    ImGui::Begin("shaders :D");
+    
+    ImGui::InputText("path", fragmentShaderPath, 512 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
+    ImGui::SameLine();
+    if(ImGui::Button(std::string("load").c_str(), ImVec2(72, 24))){
+        loadShader("..\\..\\shaders\\default_vert.shader", fragmentShaderPath);
+    }
+
+
+    ImGui::End();
 }
 
 void showUI(){

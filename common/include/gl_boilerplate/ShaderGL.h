@@ -19,12 +19,14 @@ public:
 
     // activate the shader
     // ------------------------------------------------------------------------
-    void Use() const;
-    void Bind() const;
-    void Unbind() const;
+    void Use()      const;
+    void Bind()     const;
+    void Unbind()   const;
 
 
-    unsigned int GetID() const;
+    unsigned int GetID()    const;
+
+    bool IsLinked()         const;
 
     // MVP
     unsigned int loc_model_matrix;
@@ -58,7 +60,9 @@ private:
     int GetUniformLocation(const std::string& name);
 
 private:
-    unsigned int m_ID;
+    unsigned int    m_ID;
+    bool            m_linked = false;
+
     std::unordered_map<std::string, int> uniformLocationCache;
 };
 

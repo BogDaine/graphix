@@ -35,8 +35,11 @@ void main()
     //uv = (gl_FragCoord.x - 0.5f * uResolution)/uResolution.y;
 
     mPos = vec2(uMousePos.x/uResolution.x, uMousePos.y/uResolution.y) * 2.f - vec2(1.f,1.f);
-    mPos.x *= AR;
-    mPos.y *= -1;
+    //mPos = vec2(uMousePos.x, uMousePos.y);
+    //mPos.x *= AR;
+    //mPos.y *= -1;
+
+    //mPos = vec2(0., 0.);
 
     //FragColor = vec4(gl_FragCoord.x/800.f, 1.f-(gl_FragCoord.x/800.f), TexCoords.x, 1.f);
     FragColor = vec4(0.3, TexCoords.x, 0.f, 1.f);
@@ -51,11 +54,11 @@ void main()
 
     float m = smoothstep(0.f,1.6f , d);
 
-    // if(d < 0.04f){
-    //     FragColor = vec4(color * (d * 10.f), 1.0f);
-    // }
-    vec4 mouseColor = vec4(color * (m * 10.f), 1.0f);
-    FragColor = m * mouseColor + (1.f - m) * scrColor;
-    FragColor.rgb = vec3(1.f) - FragColor.rgb;
+    if(d < 0.04f){
+        FragColor = vec4(color * (d * 10.f), 1.0f);
+    }
+    // vec4 mouseColor = vec4(color * (m * 10.f), 1.0f);
+    // FragColor = m * mouseColor + (1.f - m) * scrColor;
+    // FragColor.rgb = vec3(1.f) - FragColor.rgb;
    
 }

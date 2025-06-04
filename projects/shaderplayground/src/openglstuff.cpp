@@ -10,7 +10,7 @@ UniformBlockGL  *ogl::userInputUB;
 
 static GLuint   textures[MAX_TEXTURE_UNITS];
 
-void initOpenGL(){
+void ogl::init(){
 
     GLenum error = glewInit();
     if(error != GLEW_OK){
@@ -20,9 +20,9 @@ void initOpenGL(){
 
 
     using namespace ogl;
-    // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\basic_frag.shader");
+    appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\basic_frag.shader");
     // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\kaleidoscope1_FS.shader");
-    appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\fractal_failFS.shader");
+    // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\fractal_failFS.shader");
     // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\basic_tex_FS.shader");
 
     appInfoUB = new UniformBlockGL("app_info", 0, 4, std::vector<const char*>
@@ -46,7 +46,22 @@ void initOpenGL(){
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 }
 
-void setTextureData(
+void prepShader(){
+    using namespace ogl;
+    appInfoUB->SetShaderBinding(appShader->GetID());
+    userInputUB->SetShaderBinding(appShader->GetID());
+}
+
+void ogl::setAppShader(ShaderGL *newShader){
+    if(!newShader->IsLinked())
+        return;
+
+    delete appShader;
+    appShader = newShader;
+    prepShader();
+}
+
+void ogl::setTextureData(
     GLuint textureUnit,
     int width,
     int height,
