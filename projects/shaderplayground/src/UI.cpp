@@ -7,6 +7,11 @@
 
 #include <string>
 
+char *texturePaths[MAX_TEXTURE_UNITS];
+
+//char *text = new char[512];
+char *fragmentShaderPath = new char[255];
+
 void initUI(){
     
     IMGUI_CHECKVERSION();
@@ -20,22 +25,27 @@ void initUI(){
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; 
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
+
+    //TODO: free memory on exit
+    for(int i = 0; i < MAX_TEXTURE_UNITS; ++i){
+        texturePaths[i] = new char[256];
+        strcpy(texturePaths[i], "");
+    }
 }
 
-char *text = new char[512];
-char *fragmentShaderPath = new char[512];
+
 void UIElements(){
-    ImGui::Begin("Hello, world!");
+    ImGui::Begin("Textures :D");
 
 
-    //for(int i = 0; i < MAX_TEXTURE_UNITS; i++){
-    int i = 0;
-        ImGui::InputText("text", text, 512 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
+    //int i = 0;
+    for(int i = 0; i < MAX_TEXTURE_UNITS; i++){
+        ImGui::InputText(std::to_string(i).c_str(), texturePaths[i], 255 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
         ImGui::SameLine();
         if(ImGui::Button((std::string("texture_")+std::to_string(i)).c_str(), ImVec2(72, 24))){
-            loadImage(i, text);
+            loadImage(i, texturePaths[i]);
         }
-    //}
+    }
     //delete text;
     
     ImGui::End();
@@ -43,7 +53,7 @@ void UIElements(){
 
     ImGui::Begin("shaders :D");
     
-    ImGui::InputText("path", fragmentShaderPath, 512 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
+    ImGui::InputText("path", fragmentShaderPath, 255 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
     ImGui::SameLine();
     if(ImGui::Button(std::string("load").c_str(), ImVec2(72, 24))){
         loadShader("..\\..\\shaders\\default_vert.shader", fragmentShaderPath);
@@ -60,7 +70,7 @@ void showUI(){
 
         UIElements();
 
-        //ImGui::ShowDemoWindow();
+        // ImGui::ShowDemoWindow();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

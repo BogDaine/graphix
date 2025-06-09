@@ -1,7 +1,10 @@
 #include "shaderplayground.h"
 #include "openglstuff.h"
 
+#include "GLCall.h"
+
 #include <vector>
+#include <string>
 #include <iostream>
 
 ShaderGL        *ogl::appShader;
@@ -9,6 +12,15 @@ UniformBlockGL  *ogl::appInfoUB;
 UniformBlockGL  *ogl::userInputUB;
 
 static GLuint   textures[MAX_TEXTURE_UNITS];
+
+void setShaderSamplerUniforms();
+void prepShader(){
+    using namespace ogl;
+    appInfoUB->SetShaderBinding(appShader->GetID());
+    userInputUB->SetShaderBinding(appShader->GetID());
+    setShaderSamplerUniforms();
+}
+
 
 void ogl::init(){
 
@@ -34,8 +46,8 @@ void ogl::init(){
     appInfoUB->Init(appShader->GetID());
     userInputUB->Init(appShader->GetID());
 
-    appInfoUB->SetShaderBinding(appShader->GetID());
-    userInputUB->SetShaderBinding(appShader->GetID());
+    // appInfoUB->SetShaderBinding(appShader->GetID());
+    // userInputUB->SetShaderBinding(appShader->GetID());
 
     glGenTextures(MAX_TEXTURE_UNITS, textures);
     for (size_t i = 0; i < MAX_TEXTURE_UNITS; ++i){
@@ -44,13 +56,16 @@ void ogl::init(){
     }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    prepShader();
 }
 
-void prepShader(){
+void setShaderSamplerUniforms(){
     using namespace ogl;
-    appInfoUB->SetShaderBinding(appShader->GetID());
-    userInputUB->SetShaderBinding(appShader->GetID());
+    for(size_t i = 0; i < MAX_TEXTURE_UNITS; ++i){
+        appShader->SetInt("texture" + std::to_string(i), i);
+    }
 }
+
 
 void ogl::setAppShader(ShaderGL *newShader){
     if(!newShader->IsLinked())
@@ -73,9 +88,9 @@ void ogl::setTextureData(
     GLuint filterMag
 )
 {
-    glActiveTexture(textureUnit);
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
+    glBindTexture(GL_TEXTURE_2D, textures[textureUnit]);
     glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
 
