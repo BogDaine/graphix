@@ -2,6 +2,7 @@
 #include "openglstuff.h"
 
 #include "GLCall.h"
+#include "myutils.h"
 
 #include <vector>
 #include <string>
@@ -30,12 +31,14 @@ void ogl::init(){
         exit(-1);
     }
 
-
     using namespace ogl;
-    appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\basic_frag.shader");
-    // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\kaleidoscope1_FS.shader");
-    // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\fractal_failFS.shader");
-    // appShader = new ShaderGL("..\\..\\shaders\\default_vert.shader", "..\\..\\shaders\\basic_tex_FS.shader");
+
+    //TODO: auto generate default shader or just have the source here
+
+    appShader = new ShaderGL(
+        MyUtils::readFile("..\\..\\shaders\\default.vert").c_str(),
+        MyUtils::readFile("..\\..\\shaders\\basic.frag").c_str()
+    );
 
     appInfoUB = new UniformBlockGL("app_info", 0, 4, std::vector<const char*>
         {"uResolution", "uWindowPos", "uTime", "uDeltaTime"}.data());
@@ -46,8 +49,8 @@ void ogl::init(){
     appInfoUB->Init(appShader->GetID());
     userInputUB->Init(appShader->GetID());
 
-    // appInfoUB->SetShaderBinding(appShader->GetID());
-    // userInputUB->SetShaderBinding(appShader->GetID());
+    appInfoUB->SetShaderBinding(appShader->GetID());
+    userInputUB->SetShaderBinding(appShader->GetID());
 
     glGenTextures(MAX_TEXTURE_UNITS, textures);
     for (size_t i = 0; i < MAX_TEXTURE_UNITS; ++i){
@@ -68,9 +71,9 @@ void setShaderSamplerUniforms(){
 
 
 void ogl::setAppShader(ShaderGL *newShader){
-    if(!newShader->IsLinked())
+    if(!newShader->IsLinked()){
         return;
-
+    }
     delete appShader;
     appShader = newShader;
     prepShader();

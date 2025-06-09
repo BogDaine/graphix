@@ -79,7 +79,8 @@ ARFLAGS 	:= -r -c -s
 CXX			:= g++
 CFLAGS		:= -Wall
 #CFLAGS		:= -Wall -Wextra -Werror
-CPPFLAGS	:= -MMD -MP $(INCLUDES)
+# -g
+CPPFLAGS	:= -std=c++17 -MMD -MP $(INCLUDES)
 CPPFLAGS += -DGLEW_STATIC
 LDFLAGS		:= -L$(LIB_DIR)
 

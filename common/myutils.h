@@ -17,6 +17,8 @@ namespace MyUtils{
     void setDeltaTimeFunctionS  (TimeFunctionS *f);
 
 
+    std::string readFile(const char *path);
+
     class BasicException    :   public std::exception{
         public:
             BasicException(const char *msg): _msg(msg){}

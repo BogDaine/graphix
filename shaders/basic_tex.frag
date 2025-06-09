@@ -1,5 +1,7 @@
 #version 330 core
 
+//#pragma vscode_glsllint_stage : frag //pragma to set STAGE to 'frag
+
 out vec4 FragColor;
 in vec2 TexCoords;
 

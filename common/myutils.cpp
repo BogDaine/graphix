@@ -56,3 +56,28 @@ void MyUtils::setDeltaTimeFunctionS(TimeFunctionS *f){
 void MyUtils::setTimeFunctionS(TimeFunctionS *f){
 
 }
+
+
+#include <fstream>
+#include <sstream>
+
+std::string MyUtils::readFile(const char *path){
+        std::ifstream file;
+    // ensure ifstream objects can throw exceptions:
+    file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    try{
+        file.open(path, std::ifstream::binary);
+        std::stringstream filestream;
+        filestream << file.rdbuf();
+        file.close();
+        std::string fileContents = filestream.str();
+        //std::cout << fileContents << std::endl;
+        return fileContents;
+    }
+    catch (std::ifstream::failure e) {
+        std::cout << "ERROR::BULLSHIT ERROR:: FUCK YOU :D" << std::endl;
+        std::cout << e.what();
+        //return;
+    }
+    return std::string();
+}

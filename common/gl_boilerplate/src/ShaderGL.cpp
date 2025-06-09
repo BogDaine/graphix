@@ -4,9 +4,9 @@
 #include <signal.h>
 #include <iostream>
 
-ShaderGL::ShaderGL(const char* vertexPath, const char* fragmentPath)
+ShaderGL::ShaderGL(const char* vertexSrc, const char* fragmentSrc)
 {
-    Init(vertexPath, fragmentPath);
+    Init(vertexSrc, fragmentSrc);
 }
 
 ShaderGL::~ShaderGL()
@@ -101,37 +101,8 @@ void ShaderGL::SetInt(const std::string& name, const int& value)
 //     GLCall(glUniform3f(location, val.specular.x, val.specular.y, val.specular.z));
 // }
 
-void ShaderGL::Init(const char* vertexPath, const char* fragmentPath)
+void ShaderGL::Init(const char* vertexSrc, const char* fragmentSrc)
 {
-    // 1. retrieve the vertex/fragment source code from filePath
-    std::string vertexCode;
-    std::string fragmentCode;
-    std::ifstream vShaderFile;
-    std::ifstream fShaderFile;
-    // ensure ifstream objects can throw exceptions:
-    vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try {
-        // open files
-        vShaderFile.open(vertexPath);
-        fShaderFile.open(fragmentPath);
-        std::stringstream vShaderStream, fShaderStream;
-        // read file's buffer contents into streams
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-        // close file handlers
-        vShaderFile.close();
-        fShaderFile.close();
-        // convert stream into string
-        vertexCode = vShaderStream.str();
-        fragmentCode = fShaderStream.str();
-    }
-    catch (std::ifstream::failure e) {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-        return;
-    }
-    const char* vShaderCode = vertexCode.c_str();
-    const char* fShaderCode = fragmentCode.c_str();
 
     // 2. compile shaders
     unsigned int vertex, fragment;
@@ -139,12 +110,12 @@ void ShaderGL::Init(const char* vertexPath, const char* fragmentPath)
 
     //raise(SIGSEGV);
     vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, &vShaderCode, NULL);
+    glShaderSource(vertex, 1, &vertexSrc, NULL);
     glCompileShader(vertex);
     CheckCompileErrors(vertex, "VERTEX");
     // fragment Shader
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, &fShaderCode, NULL);
+    glShaderSource(fragment, 1, &fragmentSrc, NULL);
     glCompileShader(fragment);
     CheckCompileErrors(fragment, "FRAGMENT");
     // shader Program

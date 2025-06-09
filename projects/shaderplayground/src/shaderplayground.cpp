@@ -120,10 +120,13 @@ void loadImage(unsigned int textureUnit, const char *path){
 }
 
 void loadShader(const char *vertexPath, const char *fragmentPath){
-    auto newShader = new ShaderGL(vertexPath, fragmentPath);
+    auto vertexSrc = MyUtils::readFile(vertexPath);//.c_str();
+    auto fragmentSrc = MyUtils::readFile(fragmentPath);//.c_str();
+    std::cout << vertexSrc << std::endl;
+    std::cout << fragmentSrc << std::endl;
+    auto newShader = new ShaderGL(vertexSrc.c_str(), fragmentSrc.c_str());
     ogl::setAppShader(newShader);
 }
-
 
 int main(){
     

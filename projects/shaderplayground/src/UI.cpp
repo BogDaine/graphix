@@ -6,6 +6,7 @@
 #include "imgui_impl_opengl3.h"
 
 #include <string>
+#include <iostream>
 
 char *texturePaths[MAX_TEXTURE_UNITS];
 
@@ -34,6 +35,8 @@ void initUI(){
 }
 
 
+#include "myutils.h"
+
 void UIElements(){
     ImGui::Begin("Textures :D");
 
@@ -46,6 +49,7 @@ void UIElements(){
             loadImage(i, texturePaths[i]);
         }
     }
+    //TODO:
     //delete text;
     
     ImGui::End();
@@ -53,10 +57,18 @@ void UIElements(){
 
     ImGui::Begin("shaders :D");
     
+    //TODO: Fix the properly null terminated?? assert 
+    //gdb -g etc....
+    
     ImGui::InputText("path", fragmentShaderPath, 255 * sizeof(char), ImGuiInputTextFlags_AllowTabInput);
     ImGui::SameLine();
     if(ImGui::Button(std::string("load").c_str(), ImVec2(72, 24))){
-        loadShader("..\\..\\shaders\\default_vert.shader", fragmentShaderPath);
+        loadShader("..\\..\\shaders\\default.vert", fragmentShaderPath);
+        std::cout << fragmentShaderPath << std::endl;
+        //std::cout << MyUtils::readFile(fragmentShaderPath) << std::endl;
+
+
+        
     }
 
 
