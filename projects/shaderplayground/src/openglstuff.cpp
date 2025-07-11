@@ -70,13 +70,14 @@ void setShaderSamplerUniforms(){
 }
 
 
-void ogl::setAppShader(ShaderGL *newShader){
+bool ogl::setAppShader(ShaderGL *newShader){
     if(!newShader->IsLinked()){
-        return;
+        return false;
     }
     delete appShader;
     appShader = newShader;
     prepShader();
+    return true;
 }
 
 void ogl::setTextureData(

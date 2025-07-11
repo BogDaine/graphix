@@ -23,7 +23,7 @@ namespace ogl{
         GLuint filterMin = GL_LINEAR,
         GLuint filterMag = GL_LINEAR
     );
-    void setAppShader(ShaderGL *);
+    bool setAppShader(ShaderGL *);
     void loadShader(const char *vertexPath, const char *fragmentPath);
 }
 

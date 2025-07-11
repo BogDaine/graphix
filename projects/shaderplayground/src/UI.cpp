@@ -34,6 +34,9 @@ void initUI(){
     }
 }
 
+void initUIText(){
+    strcpy(fragmentShaderPath, info::getShaderPath());
+}
 
 #include "myutils.h"
 

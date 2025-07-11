@@ -16,4 +16,5 @@ void drawScene();
 
 void showUI();
 void initUI();
+void initUIText();
 #endif

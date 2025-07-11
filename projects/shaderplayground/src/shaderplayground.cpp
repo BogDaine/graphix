@@ -119,13 +119,53 @@ void loadImage(unsigned int textureUnit, const char *path){
     free(data);
 }
 
+
 void loadShader(const char *vertexPath, const char *fragmentPath){
     auto vertexSrc = MyUtils::readFile(vertexPath);//.c_str();
     auto fragmentSrc = MyUtils::readFile(fragmentPath);//.c_str();
     std::cout << vertexSrc << std::endl;
     std::cout << fragmentSrc << std::endl;
     auto newShader = new ShaderGL(vertexSrc.c_str(), fragmentSrc.c_str());
-    ogl::setAppShader(newShader);
+    
+    if(ogl::setAppShader(newShader)){
+        info::setShaderPath(fragmentPath);
+    }
+}
+
+void restoreConfig(){
+    std::string s;
+    s = MyUtils::readFile("cfg.cfg");
+    std::stringstream ss;
+    ss.str(s);
+
+    enum class ESetting{
+        TEXTURES,
+        SHADERS
+    };
+    ESetting setting;
+
+    while(!ss.eof()){
+        ss >> s;
+        std::cout << s << std::endl;// << s << std::endl;
+        
+        //TODO: SWITCH
+        if(setting == ESetting::SHADERS){
+            loadShader("..\\..\\shaders\\default.vert", s.c_str());
+        }
+        if(s == "[shaders]"){
+            setting = ESetting::SHADERS;
+        }
+
+    }
+    //std::cout << ss.str() << std::endl << std::endl;
+    initUIText();
+}
+
+void saveConfig(){
+    std::ofstream out("cfg.cfg");
+    out << "[shaders]" << std::endl;
+    out << info::getShaderPath();
+    out.close();
 }
 
 int main(){
@@ -134,6 +174,8 @@ int main(){
 
     // loadImage(0, "textures\\rainbow_cat.jpg");
     loadImage(0, "textures\\Masha.jpg");
+    restoreConfig();
     mainLoop();
+    saveConfig();
     return 0;
 }

@@ -22,6 +22,9 @@ namespace info{
 
     GLFWwindow *getWindow();
     void setWindow(GLFWwindow *w);
+
+    void setShaderPath(const char*);
+    const char *getShaderPath();
 }
 
 
